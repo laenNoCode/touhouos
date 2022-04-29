@@ -19,4 +19,4 @@ allocated memory to the idt/gdt setup will be determined later.
 
 In this memory address space the actual memory map will be stored and get back using a "protected real syscall" in order to get the memory availible to the device and be able to make the MMU/memmap/pagination working
 
-
+TOHOU OS will be located using special signature 'scarlet' before the end of the sector in its first stage bootloader
