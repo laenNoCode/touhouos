@@ -1,3 +1,7 @@
+%define BASE_OFFSET 0
+;offset before sceond stage, maybe for FAT info
+%define SECOND_STAGE_COUNT 100
+;number of sectors to load
 [BITS 16]
 ;initializing the stack
 mov ax, 0x7000
@@ -14,41 +18,57 @@ mov [bx], dl
 
 reset_disk_state:
 	mov ah,00
-	mov bx, booting_slot
-	mov dl, [bx]
+	mov dl, [booting_slot]
 	int 0x13
 	jc reset_disk_state;error was found
 ;then we will load data until finding the boot sector with the signature, 1 chunk at a time
 mov cx, 0
 find_booting_sector:
 	mov si, dis_addr_packet
-	mov bx, booting_slot
-	mov dl, [bx]
+	mov dl, [booting_slot]
 	mov ah, 0x42
 	int 0x13
 	jc find_booting_sector; if error, retry
-
-	call print_signature
-	;cmp ax,0
-	;je find_booting_sector
+	mov cx, [to_read_l]
+	add cx, 1
+	mov [to_read_l], cx
+	call check_signature
+	cmp ax,0
+	jne find_booting_sector
+	;signature detected. From there, we will add BASE_OFFSET before reading
+	;SECOND_STAGE_COUNT sectors and jumping there 
+	mov ax, [to_read_l]
+	add ax, BASE_OFFSET
+	mov [to_read_l], ax
+	mov dword [sector_count], SECOND_STAGE_COUNT
+LOAD_SECOND_STAGE_DATA:
+	mov dl, [booting_slot]
+	mov si,dis_addr_packet
+	mov ah,0x42
+	int 0x13
+	jc LOAD_SECOND_STAGE_DATA
+	mov ax,0xcafe
+	mov bx,320
+	call print_register
 	jne hang
-print_signature:
-	mov ax, 0xb800
+check_signature:
+	mov ax,0x800
 	mov es, ax
-	mov bx, 0x400
-	mov dx, bx
-	mov cx, 512
-	mov bx, 0
-	print_signature_loop:
-		push bx
-		mov bx, dx
-		mov al, [bx]
-		pop bx
-		mov byte [es:bx], al
-		add bx, 2
-		add dx, 1
-	loop print_signature_loop
-	mov ax, 0
+	mov bx,signature
+	mov cx, 6
+	cs_check_loop:
+		mov dx,[bx]
+		mov ax,[es:bx]
+		cmp ax,dx
+		jne cs_not_correct
+		inc bx
+	loop cs_check_loop
+	mov ax,0
+	jmp cs_end
+	cs_not_correct:
+		mov ax, cx
+		add ax, 1
+	cs_end:
 	ret
 
 call print_register
@@ -58,6 +78,7 @@ call print_register
 hang:jmp hang
 hex_charset:db "0123456789ABCDEF"
 print_register:;ax is the register to print, bx is the position to print to
+	push es
 	mov cx,4
 	mov dx, ax
 	mov ax, 0xb800
@@ -76,6 +97,7 @@ print_register:;ax is the register to print, bx is the position to print to
 		mov byte [es:bx], dl
 		sub bx, 2
 	loop print_register_loop
+	pop es
 	ret
 dis_addr_packet:
 	size:         db 0x10
@@ -83,7 +105,7 @@ dis_addr_packet:
 	sector_count: dw 0x0001
 	offset:       dw 0
 	segmt:        dw 0x800
-	to_read_l:    dd 1
+	to_read_l:    dd 0
 	to_read_h:    dd 0
 
 TIMES(503 - ($ - $$)) db 0
