@@ -47,9 +47,7 @@ LOAD_SECOND_STAGE_DATA:
 	mov ah,0x42
 	int 0x13
 	jc LOAD_SECOND_STAGE_DATA
-	mov ax,0xcafe
-	mov bx,320
-	call print_register
+	jmp 0x800:0
 	jne hang
 check_signature:
 	mov ax,0x800
