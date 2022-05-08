@@ -1,8 +1,6 @@
 #include "head/k_stdio.h"
-int truc;
 void k_putc(char c){
 	k_put_c_pos(c, 2, 1);
-	truc = 0xDEAD;
 }
 
 void k_put_c_pos(char c, char color, int pos){

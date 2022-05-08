@@ -1,12 +1,12 @@
 [BITS 32]
-section .text
+section .kernel_code
 mov eax, 0x10
 mov ss, eax
 mov ds, eax
 mov es, eax
 mov esp, 0x0007FFFF
 mov ebp, 0x0007FFFF;new stack in the same place as older rmode, before having a proper memap setted up
-mov ebx, hello + 0x8400
+mov ebx, hello
 mov edx, 160
 mov al, 0x03
 call print_string

@@ -17,8 +17,8 @@ bin/bootloader/first_stage.bin: nasm/bootloader/first_stage.nasm
 	nasm -f bin nasm/bootloader/first_stage.nasm -o bin/bootloader/first_stage.bin $(NASMFLAG)
 bin/bootloader/second_stage.bin: nasm/bootloader/second_stage.nasm
 	nasm -f bin nasm/bootloader/second_stage.nasm -o bin/bootloader/second_stage.bin $(NASMFLAG)
-bin/bootloader/pmode_first.bin: nasm/bootloader/pmode_first.nasm
-	nasm -f bin nasm/bootloader/pmode_first.nasm -o bin/bootloader/pmode_first.bin $(NASMFLAG)
+bin/bootloader/pmode_first.bin: o/bootloader/pmode_first.o o/kernel_libc/k_put_c_pos.o
+	ld o/bootloader/pmode_first.o o/kernel_libc/k_put_c_pos.o -o bin/bootloader/pmode_first.bin -T linker/kernel_libc/LINKERSCRIPT.ld -melf_i386
 o/bootloader/pmode_first.o: nasm/bootloader/pmode_first.nasm
 	nasm -o o/bootloader/pmode_first.o nasm/bootloader/pmode_first.nasm $(NASMFLAG) $(NASMFLAG32BIT)
 o/kernel_libc/k_put_c_pos.o: c/kernel_libc/head/k_stdio.h c/kernel_libc/k_put_c_pos.c 
