@@ -173,5 +173,8 @@ load_memory_map:
 		mov byte [es:di], 0
 		add di,1
 	loop load_memory_map_fill_null
+	mov ax, 0x50
+	mov es, ax
+	mov word [es:0x02], 0x600
 	ret
 TIMES(1024 - ($ - $$)) db 0
