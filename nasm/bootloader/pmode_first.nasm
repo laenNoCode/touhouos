@@ -1,4 +1,5 @@
 [BITS 32]
+extern k_print_usable_memory
 section .kernel_code
 mov eax, 0x10
 mov ss, eax
@@ -10,6 +11,10 @@ mov ebx, hello
 mov edx, 160
 mov al, 0x03
 call print_string
+mov eax, 480
+push eax
+call k_print_usable_memory
+pop eax
 jmp hang
 
 ;eax will contain the pointer to the memory map
