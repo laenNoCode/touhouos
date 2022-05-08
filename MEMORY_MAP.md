@@ -10,6 +10,8 @@
 dump the gdt before unreal bios calls (i guess i will do that a lot before i actually bother having a proper implementation of usb/floppy disk/cd/sata controllers), and even then that will remain the first way of loading data before having drivers initialized. I guess memory_load_bios will still be a routine for legacy method of loading data. it will dump idt and GDT in a specified memory zone before doing real mode syscall and reinitializing them
 
 memory before boot sector will be allocated to be the memory exchange place between the real mode and protected mode (0x500 -> 0x7BFF)
+0x500 -> will store the drive index of the boot sector
+0x502 -> pointer to the memory map
 
 the idiotic way the data is going to be loaded is as follows :
 -a program will be put in real mode address 0x7C00 (bootsector )

@@ -13,8 +13,11 @@ mov bp, 0xFFFF
 mov ax, 0x7c0
 mov ds,ax
 ;saving the disk id we booted from, will be usefull later
-mov bx,booting_slot
-mov [bx], dl
+mov [booting_slot], dl
+mov ax, 0x50
+mov es, ax
+mov [es:0], dl
+
 
 reset_disk_state:
 	mov ah,00
