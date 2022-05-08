@@ -1,5 +1,5 @@
 [BITS 32]
-
+section .text
 mov eax, 0x10
 mov ss, eax
 mov ds, eax
@@ -11,6 +11,13 @@ mov edx, 160
 mov al, 0x03
 call print_string
 jmp hang
+
+;eax will contain the pointer to the memory map
+print_memory_map:
+
+print_number:
+
+
 print_string:
 	push ebx
 	push edx
@@ -33,4 +40,4 @@ print_string:
 	ret
 hello: db "hello, wellcome to TouhouOS ", VERSION ,", currently in first pmode stage",0
 hang: jmp hang
-TIMES(512 - ($ - $$)) db 0
+TIMES(2048 - ($ - $$)) db 0
