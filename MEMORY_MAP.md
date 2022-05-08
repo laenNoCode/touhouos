@@ -1,11 +1,11 @@
-###Important, this memory map is theoric, but can and will change in during the evolution of touhouOS
+### Important, this memory map is theoric, but can and will change in during the evolution of touhouOS
 
-#what will not change
+# what will not change
 0x7c00 is the basic sector in which the code will boot (no choice for that anyway)
 
-#important 
+# important 
 
-#ideas:
+# ideas:
 
 dump the gdt before unreal bios calls (i guess i will do that a lot before i actually bother having a proper implementation of usb/floppy disk/cd/sata controllers), and even then that will remain the first way of loading data before having drivers initialized. I guess memory_load_bios will still be a routine for legacy method of loading data. it will dump idt and GDT in a specified memory zone before doing real mode syscall and reinitializing them
 
