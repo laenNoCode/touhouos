@@ -12,7 +12,7 @@ bin/os.bin: bin/bootloader/first_stage.bin bin/bootloader/second_stage.bin bin/b
 	@echo copying second stage bootloader
 	dd conv=notrunc if=bin/bootloader/second_stage.bin of=bin/os.bin bs=512 count=2 seek=1 2>/dev/null
 	@echo copying the first pmode code
-	dd conv=notrunc if=bin/bootloader/pmode_first.bin of=bin/os.bin bs=512 count=6 seek=3 2>/dev/null
+	dd conv=notrunc if=bin/bootloader/pmode_first.bin of=bin/os.bin bs=512 count=10 seek=3 2>/dev/null
 bin/bootloader/first_stage.bin: nasm/bootloader/first_stage.nasm
 	nasm -f bin nasm/bootloader/first_stage.nasm -o bin/bootloader/first_stage.bin $(NASMFLAG)
 bin/bootloader/second_stage.bin: nasm/bootloader/second_stage.nasm

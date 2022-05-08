@@ -9,5 +9,8 @@ typedef struct k_memory_entry{
 	int memory_type;
 	int ACPI_30;
 } k_memory_entry;
-void k_put_c_pos(char c, char color, int pos);
+void k_put_c_pos(int pos, char color, char c);
+void print_ull(int pos, char color, unsigned long long toPrint);
+int k_print_s(int pos, char* toPrint, char color);
+void k_print_usable_memory(int pos);
 void k_putc(char c);
