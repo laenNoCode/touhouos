@@ -14,13 +14,13 @@ memory before boot sector will be allocated to be the memory exchange place betw
 0x502 -> pointer to the memory map
 
 the idiotic way the data is going to be loaded is as follows :
--a program will be put in real mode address 0x7C00 (bootsector )
--the GDT, IDT, and all the required struff will be stored in let say 0x600
--switchity switch to real mode
--loady load at 0x2000 : 0000 (0x20000),100kiB at a time
--switch to pmode, restore the context (i guess PC will be stored at a fix place)
--copy newliy acquired data to the good place => if protected, don't copy the undesired data
--call as many times as needed
+- a program will be put in real mode address 0x7C00 (bootsector )
+- the GDT, IDT, and all the required struff will be stored in let say 0x600
+- switchity switch to real mode
+- loady load at 0x2000 : 0000 (0x20000),100kiB at a time
+- switch to pmode, restore the context (i guess PC will be stored at a fix place)
+- copy newliy acquired data to the good place => if protected, don't copy the undesired data
+- call as many times as needed
 
 
 
