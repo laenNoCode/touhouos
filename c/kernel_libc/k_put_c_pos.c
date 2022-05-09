@@ -31,7 +31,7 @@ void k_fill(int pos, char color, char c, int count){
 }
 
 void k_print_usable_memory(int pos){
-	k_memory_entry* mem_ptr = *((k_memory_entry**) (0x502));
+	k_memory_entry* mem_ptr = *((k_memory_entry**) (K_BASIC_MMAP_POS));
 	char color = 0x04;
 	while (mem_ptr -> base_memory || mem_ptr -> length || mem_ptr -> memory_type)
 	{
