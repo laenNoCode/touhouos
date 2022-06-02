@@ -2,6 +2,9 @@
 extern k_print_usable_memory
 extern relocate_memory_table
 extern print_ull
+extern relocate_kernel
+extern k_reloaction_acknowledge
+%define K_LOCATION 0x510
 section .kernel_code
 mov eax, 0x10
 mov ss, eax
@@ -33,6 +36,17 @@ mov eax, 480
 push eax
 call k_print_usable_memory
 pop eax
+mov eax, 100*512
+push eax
+mov eax, 0x1000
+push eax
+call relocate_kernel
+pop eax
+pop eax
+mov eax, [K_LOCATION]
+add eax, RELOACTED_PMODE - 0x800
+RELOACTED_PMODE:
+call k_reloaction_acknowledge
 jmp hang
 
 ;eax will contain the pointer to the memory map
@@ -61,6 +75,6 @@ print_string:
 	pop edx
 	pop ebx
 	ret
-hello: db "hello, wellcome to TouhouOS ", VERSION ,", currently in first pmode stage",0
+hello: db "hello, wellcome to TouhouOS ", VERSION ,", currently in first pmode stage, blindly loading itself",0
 hang: jmp hang
 TIMES(2048 - ($ - $$)) db 0
